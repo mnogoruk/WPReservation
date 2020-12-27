@@ -1,15 +1,12 @@
 from django.db.models import Q
-from django.http import QueryDict
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView, CreateAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
-from .models import Cabinet, Workspace, WorkspaceReservation
+from .models import Cabinet, Workspace
 from .serializer import CabinetSerializer, WorkspaceSerializer, WorkspaceReservationSerializer
 
-
-# Create your views here.
 
 class CabinetListCreateView(ListCreateAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -36,7 +33,7 @@ class WorkspaceListCreateView(ListCreateAPIView):
             # условие: берём те записи у которых для любого периода сущестующей брони
             # нет пересечения с указнаным периодом
             workspaces = Workspace.objects.filter(~Q(reservation__time_from__range=(time_from, time_to),
-                                                  reservation__time_to__range=(time_from, time_to)))
+                                                     reservation__time_to__range=(time_from, time_to)))
 
         else:
             workspaces = Workspace.objects.all()
@@ -46,7 +43,7 @@ class WorkspaceListCreateView(ListCreateAPIView):
         time_from = self.request.GET.get('time_from')
         time_to = self.request.GET.get('time_to')
 
-        # смотрим чтобы либо оба параметра были, либо ни одного
+        # смотрим, чтобы либо оба параметра были, либо ни одного
 
         if not ((time_to is None) ^ (time_from is None)):
             self.kwargs['time_to'] = time_to

@@ -2,8 +2,6 @@ from django.contrib.auth import get_user_model
 from django.db import models
 
 
-# Create your models here.
-
 class Cabinet(models.Model):
     number = models.CharField(max_length=32, null=True, blank=True)
     opt = models.CharField(max_length=32, null=True, blank=True)
