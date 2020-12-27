@@ -18,5 +18,6 @@ class Workspace(models.Model):
 class WorkspaceReservation(models.Model):
     time_from = models.DateTimeField()
     time_to = models.DateTimeField()
-    workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE)
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE, related_name='reservation')
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='reservation')
+
