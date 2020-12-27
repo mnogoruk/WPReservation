@@ -1,5 +1,5 @@
 from rest_framework.generics import ListCreateAPIView, CreateAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView
-
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from .models import Cabinet, Workspace, WorkspaceReservation
 from .serializer import CabinetSerializer, WorkspaceSerializer, WorkspaceReservationSerializer
 
@@ -7,15 +7,18 @@ from .serializer import CabinetSerializer, WorkspaceSerializer, WorkspaceReserva
 # Create your views here.
 
 class CabinetListCreateView(ListCreateAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Cabinet.objects.all()
     serializer_class = CabinetSerializer
 
 
 class CabinetUpdateRetrieveDestroyView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = CabinetSerializer
 
 
 class WorkspaceListCreateView(ListCreateAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = WorkspaceSerializer
 
     def get_queryset(self):
@@ -28,12 +31,20 @@ class WorkspaceListCreateView(ListCreateAPIView):
 
 
 class WorkspaceRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = WorkspaceSerializer
 
 
-class WorkspaceReservationCreateView(CreateAPIView):
+class ReservationCreateView(CreateAPIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = WorkspaceReservationSerializer
 
+    def create(self, request, *args, **kwargs):
+        print(kwargs)
+        print(args)
+        print(request.POST)
 
-class ReservationRetrieveView(RetrieveAPIView):
+
+class ReservationRetrieveView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = WorkspaceReservationSerializer

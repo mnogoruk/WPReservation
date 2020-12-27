@@ -1,4 +1,4 @@
-from .views import CabinetListCreateView, ReservationCreateView, WorkspaceListCreateView
+from .views import CabinetListCreateView, ReservationRetrieveView, WorkspaceListCreateView, ReservationCreateView
 from django.urls import include, path
 
 urlpatterns = [
